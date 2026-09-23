@@ -1,0 +1,134 @@
+AI_PROMPT_HISTORY.txt
+=====================
+Project: Order Tracking Screen (e-commerce mobile assessment)
+Stack: Next.js 16, React 19, Tailwind CSS v4, lucide-react, pnpm
+Generated: 2025-09-24
+
+─────────────────────────────────────────────
+PROMPT 1 — INITIAL BUILD
+─────────────────────────────────────────────
+"Build an Order Tracking Screen for an e-commerce mobile app assessment.
+Use Next.js 16 with React, Tailwind CSS v4, lucide-react.
+Support 6 scenarios: normal, delayed, delivered_not_received,
+tracking_unavailable, loading, error.
+Include timeline, status card, ETA, order summary, support actions,
+loading/empty/error states, bottom sheets, toast notifications.
+Use mock data. Mobile-first, max-width 430px container."
+
+─────────────────────────────────────────────
+PROMPT 2 — BRAND + BUG FIXES
+─────────────────────────────────────────────
+Brand color: #2563eb (blue-600).
+Bugs to fix:
+  a) Sticky ActionBar overlaps content — add bottom padding to pages.
+  b) Bottom sheet cutoff + emoji in timeline — fix overflow and replace emoji with icons.
+Placeholder style: gradient tile (bg-linear-to-br from-blue-50 to-indigo-50 + Package icon).
+Scenario switcher: gear icon (Settings2), bottom-right, collapsed by default.
+
+─────────────────────────────────────────────
+PROMPT 3 — UI POLISH (5 BATCHES)
+─────────────────────────────────────────────
+Batch 1 — Design tokens: CSS custom properties in globals.css
+  (--background, --foreground, --card-bg, --border, --radius-*, --shadow-*,
+   --space-*, --text-*, --font-weight-*), body uses var(--font-sans).
+Batch 2 — Tracking cards: StatusCard with icon+headline+sub per status,
+  ProgressTimeline with Check icons, green/blue current step, upgraded
+  timestamp contrast, OrderSummaryCard gradient tile.
+Batch 3 — Action bar / bottom sheet: ActionBar gets onChat prop, safe-area
+  bottom padding, pb-[max(0.75rem,env(safe-area-inset-bottom))].
+  BottomSheet: 90dvh, focus trap, Escape key, body scroll lock,
+  previous-focus restoration, mobile bottom-sheet + desktop centered modal.
+Batch 4 — Scenario switcher: always visible, collapsed gear button,
+  w-56 expanded panel, "Demo: Scenario" label.
+Batch 5 — Consistency: canonical Tailwind v4 classes (max-w-107.5,
+  bg-linear-to-br), no legacy max-w-[430px] or bg-gradient-to-br.
+
+─────────────────────────────────────────────
+PROMPT 4 — TOAST SYSTEM
+─────────────────────────────────────────────
+"Replace all alert() calls with a toast notification system.
+Create ToastProvider + useToast hook.
+Toast types: success, error, warning, info.
+Fixed position top-right, 4s auto-dismiss.
+Wire all alert() calls: ContactSupportSheet, DelayNotice,
+TrackingUnavailable, OrderTrackingScreen error retry."
+
+─────────────────────────────────────────────
+PROMPT 5 — SCENARIO STATE + SHEETS
+─────────────────────────────────────────────
+"Lift scenario state to page.js so ScenarioSwitcher and
+OrderTrackingScreen share it. Use key={scenario} to force remount.
+Define sheetsFragment once in OrderTrackingScreen and render in
+every branch (loading, error, empty, all 4 status branches).
+This ensures sheets are always available regardless of scenario."
+
+─────────────────────────────────────────────
+PROMPT 6 — AUDIT FIXES BATCH 1 (H1-H4, M1-M7, L1-L5)
+─────────────────────────────────────────────
+H1: page.js H1 is "Track Order" — clear and descriptive.
+H2: StatusCard uses <h2> with aria-label.
+H3: sheetsFragment pattern — defined once, rendered in all branches.
+H4: Add ProgressTimeline + StatusCard to delayed, delivered_not_received,
+    tracking_unavailable branches. Add variant prop to ProgressTimeline.
+M1: ReportIssueSheet gets initialReason prop for pre-selecting reason.
+M2: ActionBar gets onChat prop for chat button.
+M3: All buttons have handlers — no dead buttons.
+M4: Replace placehold.co URLs with gradient tiles (fallback already in UI).
+M5: DelayNotice gets onGetNotified prop — wire dead "Get Notified" button.
+M6: TrackingUnavailable — remove duplicate Contact Support button.
+M7: Use relative dates (Date.now()) instead of hardcoded 2025-09-24.
+L1: ProgressTimeline ARIA — <ol>/<li> instead of div role=list/listitem.
+L2: Stable ticket number in ReportIssueSheet (not Math.random).
+L3: CSS keyframes for animate-in/slide-in (or install tailwindcss-animate).
+L4: Remove unused imports (formatTime, formatRelativeDate, formatDelayMinutes).
+L5: Timeline upcoming steps — muted outline circle with step icon
+    (Package, Settings, Truck, MapPin, PackageCheck) instead of plain dot.
+
+─────────────────────────────────────────────
+PROMPT 7 — AUDIT FIXES BATCH 2 (H3, M1, M2, M5, M6)
+─────────────────────────────────────────────
+Implemented: ReportIssueSheet initialReason, ActionBar onChat,
+DelayNotice onGetNotified, TrackingUnavailable deduplication,
+OrderTrackingScreen sheetsFragment + useToast() replacing all alert().
+Verified: Zero alert() calls remain in codebase.
+
+─────────────────────────────────────────────
+PROMPT 8 — AUDIT FIXES BATCH 3 (H4, L1, L5)
+─────────────────────────────────────────────
+Implemented: ProgressTimeline variant prop with VARIANT_STYLES,
+<ol>/<li> ARIA, STEP_ICONS map for upcoming steps.
+Added ProgressTimeline + StatusCard to delayed, delivered_not_received,
+tracking_unavailable branches.
+Fixed STATUS_INDEX for tracking_unavailable (≡ order_confirmed, index 0)
+and delivered_not_received (≡ delivered, index 4).
+
+─────────────────────────────────────────────
+PROMPT 9 — ACTIONBAR PADDING FIX
+─────────────────────────────────────────────
+"Add bottom same space as top white bg color inside ActionBar."
+Changed: py-3 → pt-3 + pb-[max(0.75rem,env(safe-area-inset-bottom))]
+so top=12px, bottom=max(12px, safe-area-inset).
+
+─────────────────────────────────────────────
+PROMPT 10 — ASSESSMENT AUDIT (STRICT REVIEWER)
+─────────────────────────────────────────────
+"Audit the project against requirements R1-R9, S1-S3.
+Run npm install, npm run lint, npm run build.
+Check scenario switcher in production build.
+Check dead buttons, alert(), missing sheets.
+Check README.md, AI_PROMPT_HISTORY.txt, .gitignore.
+Check accessibility, 44px tap targets, no horizontal overflow at 360px.
+Report: Ready to submit YES/NO, score/100, table of requirements,
+remaining issues ranked High/Medium/Low."
+
+─────────────────────────────────────────────
+KEY DECISIONS
+─────────────────────────────────────────────
+- "don't ask, just work" — proceed without confirmation on all batches.
+- JavaScript (not TypeScript) throughout — project is JS, not TS.
+- pnpm as package manager (pnpm-lock.yaml present).
+- Tailwind v4 canonical class names: max-w-107.5, bg-linear-to-br.
+- No secrets in client code; all data is mock.
+- No external API calls — all data from mock-data.js with dynamic NOW.
+- ScenarioSwitcher always visible (no isDev gate) for assessment demo.
+- Sheets rendered in every branch via shared fragment to avoid missing modals.
